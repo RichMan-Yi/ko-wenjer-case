@@ -2,9 +2,735 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>Hello</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>柯文哲案一審判決懶人包 | 2026.03.26</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans TC', '微軟正黑體', sans-serif;
+      background: #f4f6fb;
+      color: #1a1a2e;
+      line-height: 1.6;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+      color: white;
+      padding: 64px 20px 48px;
+      text-align: center;
+    }
+    .hero .eyebrow {
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #e94560;
+      margin-bottom: 14px;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 6vw, 3.2rem);
+      font-weight: 900;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+    .hero p {
+      font-size: 1.05rem;
+      color: #a8b2d8;
+      max-width: 560px;
+      margin: 0 auto 28px;
+    }
+    .hero .date-badge {
+      display: inline-block;
+      background: rgba(233,69,96,0.15);
+      border: 1px solid rgba(233,69,96,0.5);
+      color: #e94560;
+      padding: 6px 20px;
+      border-radius: 999px;
+      font-size: 0.88rem;
+    }
+    .hero-divider {
+      height: 4px;
+      background: linear-gradient(90deg, #e94560, #0f3460);
+    }
+
+    /* ── Stats Bar ── */
+    .stats-bar {
+      background: white;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 24px 20px;
+    }
+    .stats-inner {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px 32px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .stat {
+      text-align: center;
+      padding: 8px 12px;
+    }
+    .stat-num {
+      font-size: 1.9rem;
+      font-weight: 800;
+      color: #e94560;
+      line-height: 1;
+    }
+    .stat-lbl {
+      font-size: 0.78rem;
+      color: #9ca3af;
+      margin-top: 4px;
+    }
+
+    /* ── Section wrapper ── */
+    .section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 48px 20px;
+    }
+    .section-head { margin-bottom: 28px; }
+    .section-head h2 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #1a1a2e;
+    }
+    .section-head p {
+      font-size: 0.88rem;
+      color: #9ca3af;
+      margin-top: 4px;
+    }
+
+    /* ── Defendant Cards ── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+    }
+    .card {
+      background: white;
+      border-radius: 14px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+      overflow: hidden;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
+    }
+    .card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,0.11); }
+    .card.open { border-color: #e94560; }
+
+    .card-top {
+      padding: 18px 18px 12px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .avatar {
+      width: 50px; height: 50px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; font-weight: 800;
+      color: white; flex-shrink: 0;
+    }
+    .card-meta h3 { font-size: 1.05rem; font-weight: 700; }
+    .card-meta .role { font-size: 0.78rem; color: #9ca3af; margin-top: 2px; }
+
+    .card-mid { padding: 0 18px 14px; }
+    .badge {
+      display: inline-block;
+      padding: 3px 12px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-right: 6px;
+      margin-bottom: 6px;
+    }
+    .tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+    .tag {
+      background: #f3f4f6;
+      color: #374151;
+      padding: 2px 9px;
+      border-radius: 999px;
+      font-size: 0.73rem;
+    }
+
+    .card-detail {
+      display: none;
+      border-top: 1px solid #f3f4f6;
+      padding: 16px 18px 18px;
+      background: #fafbfc;
+    }
+    .card-detail.show { display: block; }
+    .detail-simple {
+      background: #fff7ed;
+      border-left: 3px solid #f97316;
+      padding: 10px 14px;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.86rem;
+      color: #4b5563;
+      margin-bottom: 12px;
+      line-height: 1.7;
+    }
+    .detail-row {
+      display: flex; gap: 8px;
+      font-size: 0.84rem;
+      margin-bottom: 6px;
+    }
+    .dl { color: #9ca3af; flex-shrink: 0; min-width: 64px; }
+    .dv { color: #374151; font-weight: 500; }
+    .detail-summary {
+      font-size: 0.84rem;
+      color: #6b7280;
+      line-height: 1.75;
+      margin-top: 10px;
+      border-top: 1px solid #f3f4f6;
+      padding-top: 10px;
+    }
+
+    /* colour themes */
+    .c-heavy .avatar { background: #dc2626; }
+    .c-heavy .badge  { background: #fee2e2; color: #dc2626; }
+    .c-medium .avatar { background: #ea580c; }
+    .c-medium .badge  { background: #ffedd5; color: #ea580c; }
+    .c-light .avatar  { background: #ca8a04; }
+    .c-light .badge   { background: #fef9c3; color: #854d0e; }
+    .c-prob .avatar   { background: #16a34a; }
+    .c-prob .badge    { background: #dcfce7; color: #15803d; }
+    .c-none .avatar   { background: #9ca3af; }
+    .c-none .badge    { background: #f3f4f6; color: #6b7280; }
+
+    /* ── Network Graph ── */
+    .graph-wrap {
+      background: white;
+      border-radius: 14px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+      overflow: hidden;
+    }
+    #network { width: 100%; height: 520px; }
+    .graph-legend {
+      padding: 14px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      border-top: 1px solid #f3f4f6;
+    }
+    .leg { display: flex; align-items: center; gap: 7px; font-size: 0.8rem; color: #6b7280; }
+    .leg-dot { width: 11px; height: 11px; border-radius: 50%; }
+
+    /* ── Cases Accordion ── */
+    .accordion {
+      background: white;
+      border-radius: 14px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+      overflow: hidden;
+    }
+    .acc-item { border-bottom: 1px solid #f3f4f6; }
+    .acc-item:last-child { border-bottom: none; }
+    .acc-hd {
+      padding: 20px 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.15s;
+    }
+    .acc-hd:hover { background: #fafafa; }
+    .acc-hd-left { display: flex; align-items: center; gap: 14px; }
+    .acc-num {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.88rem;
+      color: white; flex-shrink: 0;
+    }
+    .acc-title { font-weight: 700; font-size: 0.98rem; }
+    .acc-sub { font-size: 0.78rem; color: #9ca3af; margin-top: 2px; }
+    .acc-arrow { color: #9ca3af; transition: transform 0.2s; font-size: 1rem; }
+    .acc-item.open .acc-arrow { transform: rotate(180deg); }
+    .acc-body { display: none; padding: 0 24px 24px; }
+    .acc-item.open .acc-body { display: block; }
+    .acc-body p { font-size: 0.88rem; color: #4b5563; line-height: 1.85; margin-bottom: 10px; }
+    .kf {
+      background: #fff7ed;
+      border-left: 3px solid #ea580c;
+      padding: 11px 15px;
+      border-radius: 0 8px 8px 0;
+      margin: 12px 0;
+      font-size: 0.84rem;
+      color: #4b5563;
+      line-height: 1.75;
+    }
+    .kf strong { color: #ea580c; }
+
+    /* ── Glossary ── */
+    .gloss-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 14px;
+    }
+    .gloss-item {
+      background: white;
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .gloss-term {
+      font-weight: 700;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .gloss-def { font-size: 0.83rem; color: #6b7280; line-height: 1.75; }
+
+    /* ── Footer ── */
+    footer {
+      background: #1a1a2e;
+      color: #6b7280;
+      text-align: center;
+      padding: 32px 20px;
+      font-size: 0.82rem;
+      line-height: 1.9;
+    }
+
+    /* ── RWD ── */
+    @media (max-width: 600px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      #network { height: 380px; }
+      .stats-inner { gap: 4px 20px; }
+    }
+  </style>
 </head>
 <body>
-  <h1>Hello！網頁部署成功 🎉</h1>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="eyebrow">臺灣臺北地方法院｜113年度金訴字第51號</div>
+  <h1>柯文哲案一審判決懶人包</h1>
+  <p>京華城弊案、政治獻金侵占、眾望基金會背信——用最白話的方式看懂這場世紀大案</p>
+  <span class="date-badge">2026 年 3 月 26 日宣判</span>
+</div>
+<div class="hero-divider"></div>
+
+<!-- Stats -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat"><div class="stat-num">11</div><div class="stat-lbl">被告人數</div></div>
+    <div class="stat"><div class="stat-num">9</div><div class="stat-lbl">有罪人數</div></div>
+    <div class="stat"><div class="stat-num">17 年</div><div class="stat-lbl">柯文哲刑期</div></div>
+    <div class="stat"><div class="stat-num">5,250 萬</div><div class="stat-lbl">應曉薇受賄金額</div></div>
+    <div class="stat"><div class="stat-num">121 億+</div><div class="stat-lbl">鼎越公司沒收金額</div></div>
+  </div>
+</div>
+
+<!-- Cards -->
+<div class="section">
+  <div class="section-head">
+    <h2>各被告判決結果</h2>
+    <p>點擊任一卡片展開詳細說明</p>
+  </div>
+  <div class="cards-grid" id="cards-grid"></div>
+</div>
+
+<!-- Graph -->
+<div class="section" style="padding-top:0">
+  <div class="section-head">
+    <h2>案件人物關係圖</h2>
+    <p>各人物之間的關係與金流——滑鼠移到節點查看說明</p>
+  </div>
+  <div class="graph-wrap">
+    <iframe src="graph.html" style="width:100%;height:680px;border:none;display:block;"></iframe>
+  </div>
+</div>
+
+<!-- Cases -->
+<div class="section" style="padding-top:0">
+  <div class="section-head">
+    <h2>三大案件白話說明</h2>
+    <p>點擊展開，用最簡單的方式理解每個罪行</p>
+  </div>
+  <div class="accordion" id="accordion"></div>
+</div>
+
+<!-- Glossary -->
+<div class="section" style="padding-top:0">
+  <div class="section-head">
+    <h2>法律名詞解釋</h2>
+    <p>看不懂的詞，這裡都有白話解釋</p>
+  </div>
+  <div class="gloss-grid" id="gloss-grid"></div>
+</div>
+
+<footer>
+  資料來源：臺灣臺北地方法院 113年度金訴字第51號判決新聞稿（2026.03.26）<br>
+  本頁僅供資訊整理用途，不代表任何法律立場。一審判決尚未確定，被告均可上訴。
+</footer>
+
+<!-- vis.js CDN -->
+<script src="https://unpkg.com/vis-network@9.1.9/standalone/umd/vis-network.min.js"></script>
+<script>
+// ═══════════════════════════════════════════════
+// GRAPH CONFIG — 在這裡調整關係圖的所有尺寸
+// ═══════════════════════════════════════════════
+const GRAPH = {
+  // 節點大小（人物）
+  size_main:   80,   // 主要被告（柯文哲、沈慶京、應曉薇）
+  size_mid:    80,   // 中層人物（黃景茂、李文宗等）
+  size_small:  80,   // 次要人物（彭振聲、邵琇珮、端木正、吳順民）
+
+  // 節點大小（公司／組織）
+  size_org:    80,   // 組織方塊節點
+
+  // 字體大小
+  font_main:   30,   // 主要節點文字
+  font_mid:    30,   // 中層節點文字
+  font_small:  30,   // 次要節點文字
+  font_edge:   30,   // 連線標籤文字
+
+  // 連線粗細
+  edge_bribe:   4,   // 行賄線
+  edge_normal:  2,   // 一般關係線
+
+  // 圖表高度（px）
+  height:     600,
+};
+// ═══════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════
+const defendants = [
+  {
+    id:'ko', name:'柯文哲', role:'前台北市長・民眾黨主席', theme:'c-heavy',
+    sentence:'有期徒刑 17 年', extra:'褫奪公權 6 年',
+    charges:['違背職務收賄','公益侵占','背信'],
+    confiscation:'沒收 1,260 萬元（另與李文宗共同沒收 827 萬）',
+    simple:'收了建商的錢，幫建商違法蓋更大的大樓；選總統時又把捐款人捐給黨和基金會的錢拿來自己用。',
+    summary:'擔任台北市長期間，收受威京集團沈慶京行賄的 210 萬元（以政治獻金為名），並違法裁示推動京華城取得超過法定上限 20% 的容積獎勵。另侵占民眾黨政治獻金約 6,000 萬元、挪用眾望基金會公款 827 萬元支付選舉人事費用。'
+  },
+  {
+    id:'ying', name:'應曉薇', role:'台北市議員（第11–14屆）', theme:'c-heavy',
+    sentence:'有期徒刑 15 年 6 月', extra:'褫奪公權 6 年・罰金 1,000 萬',
+    charges:['違背職務收賄','洗錢'],
+    confiscation:'沒收 5,250 萬元',
+    simple:'以議員身分替建商向市府施壓，收了超過 5 千萬元的賄款，還透過多個協會帳戶提現轉帳洗錢。案發前試圖出境逃逸。',
+    summary:'長期接受沈慶京透過5個公益協會轉入共計 5,250 萬元賄款。作為回報，多次透過市議會質詢、約見官員、大量索取公文等方式對市府施壓，強力推動京華城違法容積案。'
+  },
+  {
+    id:'shen', name:'沈慶京', role:'威京集團主席', theme:'c-medium',
+    sentence:'有期徒刑 10 年', extra:'褫奪公權 5 年・罰金 2,000 萬',
+    charges:['非公務員與公務員共同圖利'],
+    confiscation:'鼎越公司沒收 121 億 545 萬',
+    simple:'花幾千萬賄賂政治人物，讓自己的建案違法蓋更大，估計獲利超過百億元。',
+    summary:'為讓京華城取得超額容積，行賄柯文哲 210 萬元、應曉薇 5,250 萬元，並積極透過各種管道對市府施壓，最終讓京華城違法取得 20% 容積獎勵，不法獲益逾百億元。'
+  },
+  {
+    id:'huang', name:'黃景茂', role:'台北市都發局官員', theme:'c-medium',
+    sentence:'有期徒刑 6 年 6 月', extra:'褫奪公權 3 年',
+    charges:['公務員共同圖利'],
+    confiscation:'無',
+    simple:'明知容積獎勵申請違法，仍配合推動，並指派下屬參與違法審查會議。',
+    summary:'明知京華城容積獎勵欠缺法令依據，仍配合推動都委會審議程序，指派邵琇珮參加專案小組，建議以違法方式替京華城爭取容積獎勵。'
+  },
+  {
+    id:'peng', name:'彭振聲', role:'台北市都發局官員', theme:'c-prob',
+    sentence:'有期徒刑 2 年', extra:'緩刑 3 年・褫奪公權 1 年',
+    charges:['公務員共同圖利'],
+    confiscation:'無',
+    simple:'市府官員跟著做違法的事，但因為主動認罪且無犯罪所得，獲緩刑、不用關。',
+    summary:'配合推動京華城違法容積案，但偵查中自白且無犯罪所得，依法獲減刑並宣告緩刑 3 年。'
+  },
+  {
+    id:'shao', name:'邵琇珮', role:'台北市都發局官員', theme:'c-prob',
+    sentence:'有期徒刑 1 年 3 月', extra:'緩刑 3 年・褫奪公權 1 年',
+    charges:['公務員共同圖利'],
+    confiscation:'無',
+    simple:'依命令參與違法審查，因主動認罪並提供重要證詞，獲大幅減刑、緩刑不用關。',
+    summary:'受黃景茂指派參與專案小組，建議以違法申請方式讓京華城取得容積獎勵。偵查中自白且提供重要證詞，獲證人保護法減刑並宣告緩刑。'
+  },
+  {
+    id:'li_z', name:'李文宗', role:'柯文哲競選總部財務長', theme:'c-medium',
+    sentence:'有期徒刑 4 年 6 月', extra:'收賄部分無罪',
+    charges:['公益侵占','背信'],
+    confiscation:'與柯文哲共同沒收 827 萬',
+    simple:'幫柯文哲管帳，一起把捐款人的錢和公益基金拿去用在選舉上。收賄部分因證據不足判無罪。',
+    summary:'擔任競選總部財務長，協助柯文哲侵占政治獻金及挪用眾望基金會公款支付競選人事費。被訴收受賄賂部分，因補強證據不足，判決無罪。'
+  },
+  {
+    id:'li_j', name:'李文娟', role:'柯文哲競選帳務人員', theme:'c-light',
+    sentence:'有期徒刑 2 年 4 月', extra:'',
+    charges:['公益侵占','填製不實會計憑證'],
+    confiscation:'無',
+    simple:'幫忙做假帳、開假發票，掩蓋政治獻金被挪用的事實。',
+    summary:'負責競選財務帳務審核，協助將政治獻金匯至木可公司，並製作4張不實發票將犯罪金流偽裝成正常商業交易。'
+  },
+  {
+    id:'duan', name:'端木正', role:'會計師', theme:'c-light',
+    sentence:'有期徒刑 1 年', extra:'',
+    charges:['行使業務登載不實文書'],
+    confiscation:'無',
+    simple:'負責查帳的會計師，明知帳目有問題，還是出具「沒問題」的報告欺騙監察院。',
+    summary:'受競選總部委託辦理政治獻金申報，明知帳目有諸多疑義，仍出具不實查核報告送監察院，並自行登打不實支出項目。'
+  },
+  {
+    id:'wu', name:'吳順民', role:'威京集團顧問（退休）', theme:'c-none',
+    sentence:'無罪', extra:'',
+    charges:[],
+    confiscation:'無',
+    simple:'被檢察官起訴，但法院認為沒有足夠證據，判無罪。',
+    summary:'檢察官指控協助沈慶京進行行賄，但法院認定證據不足，判決無罪。'
+  },
+  {
+    id:'zhang', name:'張志澄', role:'相關人員', theme:'c-none',
+    sentence:'無罪', extra:'',
+    charges:[],
+    confiscation:'無',
+    simple:'被起訴但證據不足，判無罪。',
+    summary:'法院認定證據不足，判決無罪。'
+  }
+];
+
+const cases = [
+  {
+    color:'#e94560', num:'01',
+    title:'京華城容積弊案',
+    sub:'核心：用賄款換容積，讓建案違法蓋更大',
+    body:`
+      <p>京華城是松山區一塊商業用地，威京集團主席沈慶京想讓重建後的京華廣場擁有更多樓地板面積，但法規設有容積率上限，不能任意突破。</p>
+      <div class="kf"><strong>什麼是容積率？</strong><br>可以想成「這塊地最多能蓋多少樓地板面積的比例」。上限是為了控制都市密度，保障居住品質。台北市法規規定第三種商業區容積率上限為 560%，不得任意突破。</div>
+      <p>沈慶京先後行賄柯文哲 <strong>210 萬元</strong>（以政治獻金為名）、行賄議員應曉薇 <strong>5,250 萬元</strong>，讓市府違法核定超過法定上限 20% 的容積獎勵。</p>
+      <p>這個違法的 20% 增加了約 <strong>18,463 平方公尺</strong>（約 5,580 坪）的樓地板面積，估計不法獲益 <strong>超過 100 億元</strong>。</p>
+      <div class="kf"><strong>為什麼說違法？</strong><br>法院認定本案創設的「韌性城市貢獻」、「智慧城市貢獻」等容積獎勵項目，沒有任何法令依據，且牴觸台北市土管條例的容積率上限規定，屬於明確違法的圖利行為。</div>
+    `
+  },
+  {
+    color:'#f97316', num:'02',
+    title:'政治獻金侵占案',
+    sub:'核心：把民眾捐款當私房錢用',
+    body:`
+      <p>政治獻金是民眾支持候選人政治活動的捐款，依法必須存入專戶、公開申報、限定用途，候選人只是「管理者」，不能自由動用。</p>
+      <p>柯文哲、李文宗、李文娟共同以多種手法將政治獻金中飽私囊：</p>
+      <div class="kf"><strong>木可公司肖像權金 1,500 萬</strong><br>以「肖像授權費」名義，把政治獻金從競選帳戶匯入柯文哲實際控制的木可公司，再轉入柯文哲個人帳戶（其中 244 萬再轉至家人證券帳戶）。</div>
+      <div class="kf"><strong>KP 小物募款 4,133 萬</strong><br>販售競選周邊商品所收的錢，以「賣東西」為名，實際上是捐款性質，卻流入木可公司而非政治獻金專戶。</div>
+      <div class="kf"><strong>KP SHOW 演唱會盈餘 77 萬</strong><br>以柯文哲名義辦的「募款演唱會」，票價遠超合理娛樂價值，性質為政治獻金，盈餘卻匯入木可公司。</div>
+      <p>此外，柯文哲還直接侵占捐款人親交的現金 <strong>600 萬元</strong>，以及誤導採風公司將 <strong>300 萬元</strong>匯給木可公司而非民眾黨專戶。</p>
+    `
+  },
+  {
+    color:'#8b5cf6', num:'03',
+    title:'眾望基金會背信案',
+    sub:'核心：把公益基金當選舉提款機',
+    body:`
+      <p>眾望基金會是以「扶助社會弱勢」為宗旨設立的公益財團法人，接受一般民眾捐款。</p>
+      <p>柯文哲、李文宗將競選總部工作人員「形式上」聘為眾望基金會員工，但這些人實際上全在做競選工作，與公益毫無關係。</p>
+      <div class="kf"><strong>挪用金額：827 萬 1,095 元</strong><br>從 2022 年 12 月 至 2024 年 8 月，這筆錢以「薪資」名義從基金會帳戶流出，支付給負責競選事務的人員。</div>
+      <p>這些支出占眾望基金會 2023 年總支出的 <strong>60%</strong>，嚴重違反章程規定的「公益事項支出不得低於全年收入 60%」。</p>
+      <p>捐款人以為自己在幫助弱勢，錢卻被拿去養競選幕僚。</p>
+    `
+  }
+];
+
+const glossary = [
+  { icon:'⚖️', term:'褫奪公權', def:'被剝奪擔任公職、行使選舉與被選舉權的資格。例如「褫奪公權 6 年」代表 6 年內不能當官、不能投票、不能參選。' },
+  { icon:'💰', term:'沒收', def:'法院強制將犯罪所得收歸國有。例如「沒收 1,260 萬」代表柯文哲必須繳回這筆錢給國家。' },
+  { icon:'🏗️', term:'容積率', def:'建築物總樓地板面積與基地面積的比值。容積率越高，可蓋越多樓層。例如 560% 代表 1 坪土地可蓋出 5.6 坪的樓地板面積。' },
+  { icon:'🎁', term:'容積獎勵', def:'政府為鼓勵特定行為（如都市更新），允許建商在法定上限外額外增加樓地板面積。本案爭議在於此獎勵沒有任何法律依據。' },
+  { icon:'📋', term:'圖利罪', def:'公務員明知違反法令，仍為特定私人謀取不法利益的罪行。本案中市府官員明知違法，仍讓京華城容積案過關，構成此罪。' },
+  { icon:'🤝', term:'收賄罪', def:'公務員對於違背職務的行為，收受賄賂或不正利益。柯文哲收 210 萬、應曉薇收 5,250 萬，對應都是幫忙推動違法容積案。' },
+  { icon:'🧺', term:'公益侵占罪', def:'將依法應為公益目的持有的財物（如政治獻金、公益基金款項）據為己有的犯罪行為。' },
+  { icon:'📝', term:'背信罪', def:'受他人委任處理事務，卻做出違背委任人利益的行為。李文宗受眾望基金會委任，卻把公款挪用給柯文哲競選。' },
+  { icon:'🚿', term:'洗錢罪', def:'透過各種方式掩蓋、隱匿犯罪所得的來源。應曉薇透過多個協會帳戶提現再存入，製造「斷點」讓錢的來源難以追查。' },
+  { icon:'⏸️', term:'緩刑', def:'判決有罪但暫緩執行刑罰。若緩刑期間內未再犯罪，刑罰就不需執行。彭振聲、邵琇珮因主動認罪且無犯罪所得，獲緩刑 3 年。' },
+  { icon:'🔀', term:'想像競合犯', def:'一個行為同時觸犯多個罪名，從最重的罪名論處。柯文哲收賄同時構成收賄罪與圖利罪，依較重的收賄罪判刑。' },
+  { icon:'📜', term:'法律保留原則', def:'給予人民重大利益的行政行為，必須有法律依據才能進行。本案容積獎勵因無法律依據，違反此原則，屬違法行政行為。' }
+];
+
+// ═══════════════════════════════════════════════
+// RENDER CARDS
+// ═══════════════════════════════════════════════
+function renderCards() {
+  document.getElementById('cards-grid').innerHTML = defendants.map(d => `
+    <div class="card ${d.theme}" onclick="toggleCard('${d.id}')">
+      <div class="card-top">
+        <div class="avatar">${d.name[0]}</div>
+        <div class="card-meta">
+          <h3>${d.name}</h3>
+          <div class="role">${d.role}</div>
+        </div>
+      </div>
+      <div class="card-mid">
+        <span class="badge">${d.sentence}</span>
+        ${d.extra ? `<span class="badge">${d.extra}</span>` : ''}
+        <div class="tags">${d.charges.map(c=>`<span class="tag">${c}</span>`).join('')}</div>
+      </div>
+      <div class="card-detail" id="cd-${d.id}">
+        <div class="detail-simple">💬 ${d.simple}</div>
+        ${d.confiscation !== '無' ? `
+        <div class="detail-row">
+          <span class="dl">沒收</span>
+          <span class="dv">${d.confiscation}</span>
+        </div>` : ''}
+        <div class="detail-summary">${d.summary}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleCard(id) {
+  const detail = document.getElementById('cd-' + id);
+  const card = detail.closest('.card');
+  const wasOpen = detail.classList.contains('show');
+  document.querySelectorAll('.card-detail').forEach(el => el.classList.remove('show'));
+  document.querySelectorAll('.card').forEach(el => el.classList.remove('open'));
+  if (!wasOpen) { detail.classList.add('show'); card.classList.add('open'); }
+}
+
+// ═══════════════════════════════════════════════
+// RENDER NETWORK GRAPH
+// ═══════════════════════════════════════════════
+function renderGraph() {
+  const N = vis.DataSet;
+  const nodes = new N([
+    { id:'ko',       label:'柯文哲\n前台北市長',   group:'pol', size:GRAPH.size_main,  font:{size:GRAPH.font_main},  x:-100, y:  0,   fixed:true },
+    { id:'ying',     label:'應曉薇\n台北市議員',   group:'pol', size:GRAPH.size_main,  font:{size:GRAPH.font_main},  x:-100, y:-260,  fixed:true },
+    { id:'shen',     label:'沈慶京\n威京集團主席', group:'biz', size:GRAPH.size_main,  font:{size:GRAPH.font_main},  x:-440, y:-100,  fixed:true },
+    { id:'huang',    label:'黃景茂\n都發局官員',   group:'off', size:GRAPH.size_mid,   font:{size:GRAPH.font_mid},   x:  60, y: 280,  fixed:true },
+    { id:'peng',     label:'彭振聲\n都發局官員',   group:'off', size:GRAPH.size_small, font:{size:GRAPH.font_small}, x: 210, y: 370,  fixed:true },
+    { id:'shao',     label:'邵琇珮\n都發局官員',   group:'off', size:GRAPH.size_small, font:{size:GRAPH.font_small}, x: 350, y: 280,  fixed:true },
+    { id:'li_z',     label:'李文宗\n財務長',        group:'stf', size:GRAPH.size_mid,   font:{size:GRAPH.font_mid},   x: 370, y: -40,  fixed:true },
+    { id:'li_j',     label:'李文娟\n帳務人員',      group:'stf', size:GRAPH.size_small, font:{size:GRAPH.font_small}, x: 440, y: 140,  fixed:true },
+    { id:'duan',     label:'端木正\n會計師',         group:'stf', size:GRAPH.size_small, font:{size:GRAPH.font_small}, x: 500, y: 320,  fixed:true },
+    { id:'wu',       label:'吳順民\n（無罪）',       group:'inn', size:GRAPH.size_small, font:{size:GRAPH.font_small}, x:-440, y: 240,  fixed:true },
+    { id:'jinghua',  label:'京華城\n鼎越公司',      group:'org', size:GRAPH.size_org,   font:{size:GRAPH.font_small}, x:-340, y:-340,  fixed:true, shape:'box' },
+    { id:'muke',     label:'木可公司',               group:'org', size:GRAPH.size_org,   font:{size:GRAPH.font_small}, x: 210, y:-250,  fixed:true, shape:'box' },
+    { id:'zhongwang',label:'眾望基金會',              group:'org', size:GRAPH.size_org,   font:{size:GRAPH.font_small}, x: 490, y:-100,  fixed:true, shape:'box' },
+    { id:'tpp',      label:'民眾黨\n政治獻金',       group:'org', size:GRAPH.size_org,   font:{size:GRAPH.font_small}, x:  60, y:-340,  fixed:true, shape:'box' },
+  ]);
+
+  const edges = new N([
+    { from:'shen',  to:'ko',       label:'行賄 210 萬',    color:{color:'#e94560'}, width:GRAPH.edge_bribe,  font:{color:'#e94560', size:GRAPH.font_edge, align:'horizontal', vadjust:-8} },
+    { from:'shen',  to:'ying',     label:'行賄 5,250 萬',  color:{color:'#e94560'}, width:GRAPH.edge_bribe,  font:{color:'#e94560', size:GRAPH.font_edge, align:'horizontal', vadjust:-8} },
+    { from:'ying',  to:'huang',    label:'施壓',            color:{color:'#a8b2d8'}, width:GRAPH.edge_normal, dashes:true, font:{color:'#a8b2d8', size:GRAPH.font_edge, align:'horizontal', vadjust:-8} },
+    { from:'ying',  to:'peng',     label:'施壓',            color:{color:'#a8b2d8'}, width:GRAPH.edge_normal, dashes:true, font:{color:'#a8b2d8', size:GRAPH.font_edge, align:'horizontal', vadjust:-8} },
+    { from:'ying',  to:'shao',     label:'施壓',            color:{color:'#a8b2d8'}, width:GRAPH.edge_normal, dashes:true, font:{color:'#a8b2d8', size:GRAPH.font_edge, align:'horizontal', vadjust:-8} },
+    { from:'ko',    to:'huang',    label:'指揮',            color:{color:'#a8b2d8'}, width:GRAPH.edge_normal, font:{color:'#a8b2d8', size:GRAPH.font_edge, align:'horizontal', vadjust:-8} },
+    { from:'shen',  to:'jinghua',  label:'掌控',            color:{color:'#6b7280'}, width:GRAPH.edge_normal, font:{color:'#6b7280', size:GRAPH.font_edge, align:'horizontal', vadjust:-8} },
+    { from:'jinghua',to:'ko',      label:'違法容積申請',    color:{color:'#6b7280'}, width:GRAPH.edge_normal, dashes:true, font:{color:'#6b7280', size:GRAPH.font_edge, align:'horizontal', vadjust:-8} },
+    { from:'ko',    to:'li_z',     label:'指示',            color:{color:'#a8b2d8'}, width:GRAPH.edge_normal, font:{color:'#a8b2d8', size:GRAPH.font_edge, align:'horizontal', vadjust:-8} },
+    { from:'ko',    to:'li_j',     label:'指示',            color:{color:'#a8b2d8'}, width:GRAPH.edge_normal, font:{color:'#a8b2d8', size:GRAPH.font_edge, align:'horizontal', vadjust:-8} },
+    { from:'ko',    to:'muke',     label:'實質控制',        color:{color:'#6b7280'}, width:GRAPH.edge_normal, font:{color:'#6b7280', size:GRAPH.font_edge, align:'horizontal', vadjust:-8} },
+    { from:'muke',  to:'tpp',      label:'侵占',            color:{color:'#e94560'}, width:GRAPH.edge_normal, dashes:true, font:{color:'#e94560', size:GRAPH.font_edge, align:'horizontal', vadjust:-8} },
+    { from:'li_z',  to:'zhongwang',label:'挪用公款',        color:{color:'#e94560'}, width:GRAPH.edge_normal, dashes:true, font:{color:'#e94560', size:GRAPH.font_edge, align:'horizontal', vadjust:-8} },
+    { from:'li_j',  to:'duan',     label:'不實申報',        color:{color:'#e94560'}, width:GRAPH.edge_normal, dashes:true, font:{color:'#e94560', size:GRAPH.font_edge, align:'horizontal', vadjust:-8} },
+    { from:'wu',    to:'shen',     label:'協助（無罪）',    color:{color:'#4b5563'}, width:GRAPH.edge_normal, dashes:true, font:{color:'#4b5563', size:GRAPH.font_edge, align:'horizontal', vadjust:-8} },
+  ]);
+
+  const groupColors = {
+    pol: { background:'#e94560', border:'#b91c4a', font:{color:'#fff', size:15} },
+    biz: { background:'#0f3460', border:'#0a1f3a', font:{color:'#fff', size:15} },
+    off: { background:'#16213e', border:'#0a1220', font:{color:'#a8b2d8', size:14} },
+    stf: { background:'#1a1a2e', border:'#0d0d1a', font:{color:'#a8b2d8', size:14} },
+    inn: { background:'#6b7280', border:'#4b5563', font:{color:'#fff',    size:13} },
+    org: { background:'#fff0f3', border:'#e94560', font:{color:'#b91c4a', size:13} },
+  };
+
+  const options = {
+    groups: groupColors,
+    nodes: { borderWidth:2, shadow:{ enabled:true, color:'rgba(0,0,0,0.25)', size:10 }, font:{ face:'system-ui' }, shape:'ellipse' },
+    edges: { arrows:'to', smooth:{ type:'cubicBezier', roundness:0.4 }, font:{ align:'horizontal', vadjust:-8 } },
+    physics: { enabled: false },
+    interaction: { hover:true, dragNodes:false, zoomView:false, dragView:false }
+  };
+
+  const net = new vis.Network(
+    document.getElementById('network'),
+    { nodes, edges },
+    options
+  );
+
+  // Click tooltip
+  const info = {
+    ko:'柯文哲：前台北市長，收賄 210 萬 + 侵占政治獻金 + 背信，判 17 年',
+    ying:'應曉薇：台北市議員，收賄 5,250 萬 + 洗錢，判 15 年 6 月',
+    shen:'沈慶京：威京集團主席，行賄官員圖利，判 10 年，鼎越公司沒收 121 億+',
+    huang:'黃景茂：都發局官員，配合違法容積審查，判 6 年 6 月',
+    peng:'彭振聲：都發局官員，配合違法容積審查，判 2 年緩刑 3 年',
+    shao:'邵琇珮：都發局官員，配合違法容積審查，判 1 年 3 月緩刑 3 年',
+    li_z:'李文宗：競選財務長，侵占政治獻金 + 背信，判 4 年 6 月',
+    li_j:'李文娟：帳務人員，侵占 + 假帳，判 2 年 4 月',
+    duan:'端木正：會計師，出具不實查核報告，判 1 年',
+    wu:'吳順民：被起訴但無罪',
+    jinghua:'京華城（鼎越公司）：沈慶京旗下公司，違法取得容積獎勵，沒收 121 億+',
+    muke:'木可公司：柯文哲實際控制，用來侵占政治獻金',
+    zhongwang:'眾望基金會：公益財團，公款 827 萬被挪用作競選用途',
+    tpp:'民眾黨政治獻金專戶：約 6,000 萬元遭侵占',
+  };
+  const tooltip = Object.assign(document.createElement('div'), {
+    style: 'position:fixed;background:#1a1a2e;color:#fff;padding:8px 14px;border-radius:8px;font-size:0.82rem;max-width:260px;pointer-events:none;display:none;z-index:999;box-shadow:0 4px 16px rgba(0,0,0,0.3);line-height:1.5'
+  });
+  document.body.appendChild(tooltip);
+  net.on('hoverNode', e => {
+    if (info[e.node]) {
+      tooltip.textContent = info[e.node];
+      tooltip.style.display = 'block';
+    }
+  });
+  net.on('blurNode', () => { tooltip.style.display = 'none'; });
+  document.addEventListener('mousemove', e => {
+    tooltip.style.left = (e.clientX + 14) + 'px';
+    tooltip.style.top  = (e.clientY - 10) + 'px';
+  });
+}
+
+// ═══════════════════════════════════════════════
+// RENDER ACCORDION
+// ═══════════════════════════════════════════════
+function renderAccordion() {
+  document.getElementById('accordion').innerHTML = cases.map((c,i) => `
+    <div class="acc-item" id="acc-${i}">
+      <div class="acc-hd" onclick="toggleAcc(${i})">
+        <div class="acc-hd-left">
+          <div class="acc-num" style="background:${c.color}">${c.num}</div>
+          <div>
+            <div class="acc-title">${c.title}</div>
+            <div class="acc-sub">${c.sub}</div>
+          </div>
+        </div>
+        <div class="acc-arrow">▼</div>
+      </div>
+      <div class="acc-body">${c.body}</div>
+    </div>
+  `).join('');
+}
+function toggleAcc(i) {
+  document.getElementById('acc-'+i).classList.toggle('open');
+}
+
+// ═══════════════════════════════════════════════
+// RENDER GLOSSARY
+// ═══════════════════════════════════════════════
+function renderGlossary() {
+  document.getElementById('gloss-grid').innerHTML = glossary.map(g => `
+    <div class="gloss-item">
+      <div class="gloss-term">${g.icon} ${g.term}</div>
+      <div class="gloss-def">${g.def}</div>
+    </div>
+  `).join('');
+}
+
+// ═══════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════
+renderCards();
+renderAccordion();
+renderGlossary();
+window.addEventListener('load', () => {
+  if (typeof vis !== 'undefined') {
+    renderGraph();
+  } else {
+    document.getElementById('network').innerHTML =
+      '<p style="padding:60px;text-align:center;color:#9ca3af">關係圖需要網路連線才能載入</p>';
+  }
+});
+</script>
 </body>
 </html>
