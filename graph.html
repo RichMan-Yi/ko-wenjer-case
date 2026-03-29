@@ -33,7 +33,7 @@
       border-top: 1px solid #f3f4f6;
       max-width: 1160px; margin: 0 auto;
     }
-    .leg { display: flex; align-items: center; gap: 7px; font-size: 0.78rem; color: #6b7280; }
+    .leg { display: flex; align-items: center; gap: 7px; font-size: 0.78rem; color: #6b7280; white-space: nowrap; }
     .leg-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
   </style>
 </head>
@@ -95,89 +95,104 @@
 //  dash   : 虛線樣式（可省略）
 //  marker : 箭頭顏色 'red' | 'blue' | 'gray'（可省略）
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// label.cx/cy  : 文字中心座標
+// label.text   : 顯示文字
+// label.bold   : 粗體（選填）
+// label.size   : 字體大小（選填，預設 12）
+// label.w      : 強制背景框寬度（選填，預設自動估算）
+// label.color  : 文字顏色（選填，預設繼承線條 stroke）
 const EDGES = [
+  // 1. 沈慶京 → 柯文哲
   { id: 1,  src:'shen',    tgt:'ko',
     d:'M 227,295 H 488',
-    stroke:'#e94560', sw:3, marker:'red' },
+    stroke:'#e94560', sw:3, marker:'red',
+    label: { cx:325, cy:285, text:'行賄 210 萬', bold:true } },
 
+  // 2. 沈慶京 → 應曉薇
   { id: 2,  src:'shen',    tgt:'ying',
     d:'M 227,278 H 264 Q 280,278 280,262 V 161 Q 280,145 296,145 H 318',
-    stroke:'#e94560', sw:3, marker:'red' },
+    stroke:'#e94560', sw:3, marker:'red',
+    label: { cx:279, cy:204, text:'行賄 5,250 萬', bold:true } },
 
+  // 3. 沈慶京 ↔ 京華城（無箭頭）
   { id: 3,  src:'shen',    tgt:'jinghua',
     d:'M 155,259 V 113',
-    stroke:'#6b7280', sw:2 },
+    stroke:'#6b7280', sw:2,
+    label: { cx:135, cy:192, text:'掌控' } },
 
+  // 4. 京華城 → 柯文哲
   { id: 4,  src:'jinghua', tgt:'ko',
-    d:'M 230,90 H 454 Q 470,90 470,106 V 238 Q 470,254 486,254 H 488',
-    stroke:'#9ca3af', sw:1.5, dash:'6,4', marker:'gray' },
+    d:'M 230,90 H 554 Q 570,90 570,106 V 254',
+    stroke:'#9ca3af', sw:1.5, dash:'6,4', marker:'gray',
+    label: { cx:592, cy:180, text:'違法容積申請', size:11 } },
 
+  // 5. 應曉薇 → 黃景茂
   { id: 5,  src:'ying',    tgt:'huang',
     d:'M 368,181 V 344 Q 368,360 352,360 H 338 Q 322,360 322,376 V 429',
-    stroke:'#a8b2d8', sw:1.5, dash:'5,4', marker:'blue' },
+    stroke:'#a8b2d8', sw:1.5, dash:'5,4', marker:'blue',
+    label: { cx:348, cy:267, text:'施壓' } },
 
+  // 6. 應曉薇 → 彭振聲
   { id: 6,  src:'ying',    tgt:'peng',
-    d:'M 410,181 H 494 Q 510,181 510,197 V 509',
-    stroke:'#a8b2d8', sw:1.5, dash:'5,4', marker:'blue' },
+    d:'M 410,181 H 504 Q 520,181 520,197 V 509',
+    stroke:'#a8b2d8', sw:1.5, dash:'5,4', marker:'blue',
+    label: { cx:542, cy:355, text:'施壓' } },
 
+  // 7. 應曉薇 → 邵琇珮
   { id: 7,  src:'ying',    tgt:'shao',
     d:'M 462,145 H 677 Q 693,145 693,161 V 474 Q 693,490 709,490 H 718',
-    stroke:'#a8b2d8', sw:1.5, dash:'5,4', marker:'blue' },
+    stroke:'#a8b2d8', sw:1.5, dash:'5,4', marker:'blue',
+    label: { cx:693, cy:186, text:'施壓' } },
 
+  // 8. 柯文哲 → 黃景茂
   { id: 8,  src:'ko',      tgt:'huang',
     d:'M 510,336 Q 510,360 494,360 H 432 Q 416,360 416,376 V 429',
-    stroke:'#a8b2d8', sw:2, marker:'blue' },
+    stroke:'#a8b2d8', sw:2, marker:'blue',
+    label: { cx:440, cy:393, text:'指揮' } },
 
+  // 9. 吳順民 → 沈慶京
   { id: 9,  src:'wu',      tgt:'shen',
     d:'M 170,463 V 331',
-    stroke:'#9ca3af', sw:1.5, dash:'5,4', marker:'gray' },
+    stroke:'#9ca3af', sw:1.5, dash:'5,4', marker:'gray',
+    label: { cx:130, cy:404, text:'協助（無罪）', size:11 } },
 
+  // 10. 柯文哲 → 木可公司
   { id: 10, src:'ko',      tgt:'muke',
-    d:'M 652,278 H 784 Q 800,278 800,262 V 201',
-    stroke:'#6b7280', sw:2, marker:'gray' },
+    d:'M 652,278 H 784 Q 800,278 800,262 V 190',
+    stroke:'#6b7280', sw:2, marker:'gray',
+    label: { cx:800, cy:232, text:'實質控制' } },
 
+  // 11. 木可公司 → 民眾黨
   { id: 11, src:'muke',    tgt:'tpp',
     d:'M 865,155 H 974 Q 990,155 990,139 V 93',
-    stroke:'#e94560', sw:1.5, dash:'6,4', marker:'red' },
+    stroke:'#e94560', sw:1.5, dash:'6,4', marker:'red',
+    label: { cx:896, cy:169, text:'侵占' } },
 
+  // 12. 柯文哲 → 李文宗
   { id: 12, src:'ko',      tgt:'li_z',
     d:'M 652,295 H 808',
-    stroke:'#a8b2d8', sw:2, marker:'blue' },
+    stroke:'#a8b2d8', sw:2, marker:'blue',
+    label: { cx:723, cy:295, text:'指示' } },
 
+  // 13. 李文宗 → 眾望基金會
   { id: 13, src:'li_z',    tgt:'zhongwang',
     d:'M 870,264 V 240 Q 870,224 886,224 H 1024 Q 1040,224 1040,240 V 272',
-    stroke:'#e94560', sw:1.5, dash:'6,4', marker:'red' },
+    stroke:'#e94560', sw:1.5, dash:'6,4', marker:'red',
+    label: { cx:970, cy:230, text:'挪用公款' } },
 
+  // 14. 柯文哲 → 李文娟
   { id: 14, src:'ko',      tgt:'li_j',
     d:'M 652,312 H 752 Q 768,312 768,328 V 419 Q 768,435 784,435 H 818',
-    stroke:'#a8b2d8', sw:2, marker:'blue' },
+    stroke:'#a8b2d8', sw:2, marker:'blue',
+    label: { cx:748, cy:370, text:'指示' } },
 
+  // 15. 李文娟 → 端木正
   { id: 15, src:'li_j',    tgt:'duan',
-    d:'M 922,435 H 988',
-    stroke:'#e94560', sw:1.5, dash:'6,4', marker:'red' },
+    d:'M 922,435 H 998',
+    stroke:'#e94560', sw:1.5, dash:'6,4', marker:'red',
+    label: { cx:958, cy:428, text:'不實申報' } },
 ];
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-//  LABEL CONFIG  ← 只需要調這裡
-//  id 對應 EDGES 的 id（決定 highlight 時一起亮）
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-const LABELS = [
-  { id:  1, cx: 325, cy: 285, text: '行賄 210 萬',   color: '#e94560', bold: true  },
-  { id:  2, cx: 279, cy: 204, text: '行賄 5,250 萬', color: '#e94560', bold: true  },
-  { id:  3, cx: 137, cy: 192, text: '掌控',          color: '#6b7280'              },
-  { id:  4, cx: 349, cy:  86, text: '違法容積申請',  color: '#9ca3af', size: 11    },
-  { id:  5, cx: 348, cy: 267, text: '施壓',          color: '#a8b2d8'              },
-  { id:  6, cx: 488, cy: 339, text: '施壓',          color: '#a8b2d8'              },
-  { id:  7, cx: 693, cy: 186, text: '施壓',          color: '#a8b2d8'              },
-  { id:  8, cx: 440, cy: 393, text: '指揮',          color: '#a8b2d8'              },
-  { id:  9, cx: 134, cy: 404, text: '協助（無罪）',  color: '#9ca3af', size: 11    },
-  { id: 10, cx: 844, cy: 232, text: '實質控制',      color: '#6b7280'              },
-  { id: 11, cx: 896, cy: 129, text: '侵占',          color: '#e94560'              },
-  { id: 12, cx: 708, cy: 291, text: '指示',          color: '#a8b2d8'              },
-  { id: 13, cx: 970, cy: 230, text: '挪用公款',      color: '#e94560'              },
-  { id: 14, cx: 698, cy: 370, text: '指示',          color: '#a8b2d8'              },
-  { id: 15, cx: 958, cy: 428, text: '不實申報',      color: '#e94560'              },
-];
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 //  NODE CONFIG  ← 只需要調這裡
@@ -259,7 +274,7 @@ const NODES = [
   },
   {
     id:'duan',
-    shape:'ellipse', cx:1040, cy:435, rx:52, ry:26,
+    shape:'ellipse', cx:1050, cy:435, rx:52, ry:26,
     fill:'#1a1a2e', stroke:'#0d0d1a',
     name:'端木正', nameSize:13, nameFill:'#a8b2d8',
     sub:'會計師', subFill:'#6b7280',
@@ -423,9 +438,14 @@ function makeNode(cfg) {
 }
 
 // ── Render ────────────────────────────
-EDGES.forEach(e  => document.getElementById('edges').appendChild(makeEdge(e)));
-LABELS.forEach(l => document.getElementById('labels').appendChild(makeLabel(l)));
-NODES.forEach(n  => document.getElementById('nodes').appendChild(makeNode(n)));
+EDGES.forEach(e => {
+  document.getElementById('edges').appendChild(makeEdge(e));
+  if (e.label) {
+    const lCfg = { ...e.label, id: e.id, color: e.label.color ?? e.stroke };
+    document.getElementById('labels').appendChild(makeLabel(lCfg));
+  }
+});
+NODES.forEach(n => document.getElementById('nodes').appendChild(makeNode(n)));
 
 // ── Highlight logic ───────────────────
 let activeNode = null;
