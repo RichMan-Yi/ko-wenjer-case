@@ -367,34 +367,7 @@
   本頁僅供資訊整理用途，不代表任何法律立場。一審判決尚未確定，被告均可上訴。
 </footer>
 
-<!-- vis.js CDN -->
-<script src="https://unpkg.com/vis-network@9.1.9/standalone/umd/vis-network.min.js"></script>
 <script>
-// ═══════════════════════════════════════════════
-// GRAPH CONFIG — 在這裡調整關係圖的所有尺寸
-// ═══════════════════════════════════════════════
-const GRAPH = {
-  // 節點大小（人物）
-  size_main:   80,   // 主要被告（柯文哲、沈慶京、應曉薇）
-  size_mid:    80,   // 中層人物（黃景茂、李文宗等）
-  size_small:  80,   // 次要人物（彭振聲、邵琇珮、端木正、吳順民）
-
-  // 節點大小（公司／組織）
-  size_org:    80,   // 組織方塊節點
-
-  // 字體大小
-  font_main:   30,   // 主要節點文字
-  font_mid:    30,   // 中層節點文字
-  font_small:  30,   // 次要節點文字
-  font_edge:   30,   // 連線標籤文字
-
-  // 連線粗細
-  edge_bribe:   4,   // 行賄線
-  edge_normal:  2,   // 一般關係線
-
-  // 圖表高度（px）
-  height:     600,
-};
 // ═══════════════════════════════════════════════
 // DATA
 // ═══════════════════════════════════════════════
@@ -584,102 +557,6 @@ function toggleCard(id) {
   if (!wasOpen) { detail.classList.add('show'); card.classList.add('open'); }
 }
 
-// ═══════════════════════════════════════════════
-// RENDER NETWORK GRAPH
-// ═══════════════════════════════════════════════
-function renderGraph() {
-  const N = vis.DataSet;
-  const nodes = new N([
-    { id:'ko',       label:'柯文哲\n前台北市長',   group:'pol', size:GRAPH.size_main,  font:{size:GRAPH.font_main},  x:-100, y:  0,   fixed:true },
-    { id:'ying',     label:'應曉薇\n台北市議員',   group:'pol', size:GRAPH.size_main,  font:{size:GRAPH.font_main},  x:-100, y:-260,  fixed:true },
-    { id:'shen',     label:'沈慶京\n威京集團主席', group:'biz', size:GRAPH.size_main,  font:{size:GRAPH.font_main},  x:-440, y:-100,  fixed:true },
-    { id:'huang',    label:'黃景茂\n都發局官員',   group:'off', size:GRAPH.size_mid,   font:{size:GRAPH.font_mid},   x:  60, y: 280,  fixed:true },
-    { id:'peng',     label:'彭振聲\n都發局官員',   group:'off', size:GRAPH.size_small, font:{size:GRAPH.font_small}, x: 210, y: 370,  fixed:true },
-    { id:'shao',     label:'邵琇珮\n都發局官員',   group:'off', size:GRAPH.size_small, font:{size:GRAPH.font_small}, x: 350, y: 280,  fixed:true },
-    { id:'li_z',     label:'李文宗\n財務長',        group:'stf', size:GRAPH.size_mid,   font:{size:GRAPH.font_mid},   x: 370, y: -40,  fixed:true },
-    { id:'li_j',     label:'李文娟\n帳務人員',      group:'stf', size:GRAPH.size_small, font:{size:GRAPH.font_small}, x: 440, y: 140,  fixed:true },
-    { id:'duan',     label:'端木正\n會計師',         group:'stf', size:GRAPH.size_small, font:{size:GRAPH.font_small}, x: 500, y: 320,  fixed:true },
-    { id:'wu',       label:'吳順民\n（無罪）',       group:'inn', size:GRAPH.size_small, font:{size:GRAPH.font_small}, x:-440, y: 240,  fixed:true },
-    { id:'jinghua',  label:'京華城\n鼎越公司',      group:'org', size:GRAPH.size_org,   font:{size:GRAPH.font_small}, x:-340, y:-340,  fixed:true, shape:'box' },
-    { id:'muke',     label:'木可公司',               group:'org', size:GRAPH.size_org,   font:{size:GRAPH.font_small}, x: 210, y:-250,  fixed:true, shape:'box' },
-    { id:'zhongwang',label:'眾望基金會',              group:'org', size:GRAPH.size_org,   font:{size:GRAPH.font_small}, x: 490, y:-100,  fixed:true, shape:'box' },
-    { id:'tpp',      label:'民眾黨\n政治獻金',       group:'org', size:GRAPH.size_org,   font:{size:GRAPH.font_small}, x:  60, y:-340,  fixed:true, shape:'box' },
-  ]);
-
-  const edges = new N([
-    { from:'shen',  to:'ko',       label:'行賄 210 萬',    color:{color:'#e94560'}, width:GRAPH.edge_bribe,  font:{color:'#e94560', size:GRAPH.font_edge, align:'horizontal', vadjust:-8} },
-    { from:'shen',  to:'ying',     label:'行賄 5,250 萬',  color:{color:'#e94560'}, width:GRAPH.edge_bribe,  font:{color:'#e94560', size:GRAPH.font_edge, align:'horizontal', vadjust:-8} },
-    { from:'ying',  to:'huang',    label:'施壓',            color:{color:'#a8b2d8'}, width:GRAPH.edge_normal, dashes:true, font:{color:'#a8b2d8', size:GRAPH.font_edge, align:'horizontal', vadjust:-8} },
-    { from:'ying',  to:'peng',     label:'施壓',            color:{color:'#a8b2d8'}, width:GRAPH.edge_normal, dashes:true, font:{color:'#a8b2d8', size:GRAPH.font_edge, align:'horizontal', vadjust:-8} },
-    { from:'ying',  to:'shao',     label:'施壓',            color:{color:'#a8b2d8'}, width:GRAPH.edge_normal, dashes:true, font:{color:'#a8b2d8', size:GRAPH.font_edge, align:'horizontal', vadjust:-8} },
-    { from:'ko',    to:'huang',    label:'指揮',            color:{color:'#a8b2d8'}, width:GRAPH.edge_normal, font:{color:'#a8b2d8', size:GRAPH.font_edge, align:'horizontal', vadjust:-8} },
-    { from:'shen',  to:'jinghua',  label:'掌控',            color:{color:'#6b7280'}, width:GRAPH.edge_normal, font:{color:'#6b7280', size:GRAPH.font_edge, align:'horizontal', vadjust:-8} },
-    { from:'jinghua',to:'ko',      label:'違法容積申請',    color:{color:'#6b7280'}, width:GRAPH.edge_normal, dashes:true, font:{color:'#6b7280', size:GRAPH.font_edge, align:'horizontal', vadjust:-8} },
-    { from:'ko',    to:'li_z',     label:'指示',            color:{color:'#a8b2d8'}, width:GRAPH.edge_normal, font:{color:'#a8b2d8', size:GRAPH.font_edge, align:'horizontal', vadjust:-8} },
-    { from:'ko',    to:'li_j',     label:'指示',            color:{color:'#a8b2d8'}, width:GRAPH.edge_normal, font:{color:'#a8b2d8', size:GRAPH.font_edge, align:'horizontal', vadjust:-8} },
-    { from:'ko',    to:'muke',     label:'實質控制',        color:{color:'#6b7280'}, width:GRAPH.edge_normal, font:{color:'#6b7280', size:GRAPH.font_edge, align:'horizontal', vadjust:-8} },
-    { from:'muke',  to:'tpp',      label:'侵占',            color:{color:'#e94560'}, width:GRAPH.edge_normal, dashes:true, font:{color:'#e94560', size:GRAPH.font_edge, align:'horizontal', vadjust:-8} },
-    { from:'li_z',  to:'zhongwang',label:'挪用公款',        color:{color:'#e94560'}, width:GRAPH.edge_normal, dashes:true, font:{color:'#e94560', size:GRAPH.font_edge, align:'horizontal', vadjust:-8} },
-    { from:'li_j',  to:'duan',     label:'不實申報',        color:{color:'#e94560'}, width:GRAPH.edge_normal, dashes:true, font:{color:'#e94560', size:GRAPH.font_edge, align:'horizontal', vadjust:-8} },
-    { from:'wu',    to:'shen',     label:'協助（無罪）',    color:{color:'#4b5563'}, width:GRAPH.edge_normal, dashes:true, font:{color:'#4b5563', size:GRAPH.font_edge, align:'horizontal', vadjust:-8} },
-  ]);
-
-  const groupColors = {
-    pol: { background:'#e94560', border:'#b91c4a', font:{color:'#fff', size:15} },
-    biz: { background:'#0f3460', border:'#0a1f3a', font:{color:'#fff', size:15} },
-    off: { background:'#16213e', border:'#0a1220', font:{color:'#a8b2d8', size:14} },
-    stf: { background:'#1a1a2e', border:'#0d0d1a', font:{color:'#a8b2d8', size:14} },
-    inn: { background:'#6b7280', border:'#4b5563', font:{color:'#fff',    size:13} },
-    org: { background:'#fff0f3', border:'#e94560', font:{color:'#b91c4a', size:13} },
-  };
-
-  const options = {
-    groups: groupColors,
-    nodes: { borderWidth:2, shadow:{ enabled:true, color:'rgba(0,0,0,0.25)', size:10 }, font:{ face:'system-ui' }, shape:'ellipse' },
-    edges: { arrows:'to', smooth:{ type:'cubicBezier', roundness:0.4 }, font:{ align:'horizontal', vadjust:-8 } },
-    physics: { enabled: false },
-    interaction: { hover:true, dragNodes:false, zoomView:false, dragView:false }
-  };
-
-  const net = new vis.Network(
-    document.getElementById('network'),
-    { nodes, edges },
-    options
-  );
-
-  // Click tooltip
-  const info = {
-    ko:'柯文哲：前台北市長，收賄 210 萬 + 侵占政治獻金 + 背信，判 17 年',
-    ying:'應曉薇：台北市議員，收賄 5,250 萬 + 洗錢，判 15 年 6 月',
-    shen:'沈慶京：威京集團主席，行賄官員圖利，判 10 年，鼎越公司沒收 121 億+',
-    huang:'黃景茂：都發局官員，配合違法容積審查，判 6 年 6 月',
-    peng:'彭振聲：都發局官員，配合違法容積審查，判 2 年緩刑 3 年',
-    shao:'邵琇珮：都發局官員，配合違法容積審查，判 1 年 3 月緩刑 3 年',
-    li_z:'李文宗：競選財務長，侵占政治獻金 + 背信，判 4 年 6 月',
-    li_j:'李文娟：帳務人員，侵占 + 假帳，判 2 年 4 月',
-    duan:'端木正：會計師，出具不實查核報告，判 1 年',
-    wu:'吳順民：被起訴但無罪',
-    jinghua:'京華城（鼎越公司）：沈慶京旗下公司，違法取得容積獎勵，沒收 121 億+',
-    muke:'木可公司：柯文哲實際控制，用來侵占政治獻金',
-    zhongwang:'眾望基金會：公益財團，公款 827 萬被挪用作競選用途',
-    tpp:'民眾黨政治獻金專戶：約 6,000 萬元遭侵占',
-  };
-  const tooltip = Object.assign(document.createElement('div'), {
-    style: 'position:fixed;background:#1a1a2e;color:#fff;padding:8px 14px;border-radius:8px;font-size:0.82rem;max-width:260px;pointer-events:none;display:none;z-index:999;box-shadow:0 4px 16px rgba(0,0,0,0.3);line-height:1.5'
-  });
-  document.body.appendChild(tooltip);
-  net.on('hoverNode', e => {
-    if (info[e.node]) {
-      tooltip.textContent = info[e.node];
-      tooltip.style.display = 'block';
-    }
-  });
-  net.on('blurNode', () => { tooltip.style.display = 'none'; });
-  document.addEventListener('mousemove', e => {
-    tooltip.style.left = (e.clientX + 14) + 'px';
-    tooltip.style.top  = (e.clientY - 10) + 'px';
-  });
-}
 
 // ═══════════════════════════════════════════════
 // RENDER ACCORDION
@@ -723,14 +600,6 @@ function renderGlossary() {
 renderCards();
 renderAccordion();
 renderGlossary();
-window.addEventListener('load', () => {
-  if (typeof vis !== 'undefined') {
-    renderGraph();
-  } else {
-    document.getElementById('network').innerHTML =
-      '<p style="padding:60px;text-align:center;color:#9ca3af">關係圖需要網路連線才能載入</p>';
-  }
-});
 </script>
 </body>
 </html>
